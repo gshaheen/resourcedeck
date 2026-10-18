@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-theme="boardroom-daylight">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>resourcedeck</title>
+    <script>
+      {
+        const savedTheme = localStorage.getItem('rdeck-theme') || 'boardroom-daylight'
+        const lightThemes = ['boardroom-daylight', 'warm-paper', 'nordic-frost']
+        let resolvedTheme = savedTheme
+        if (savedTheme === 'system') {
+          resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'executive-slate'
+            : 'boardroom-daylight'
+        }
+        document.documentElement.setAttribute('data-theme', resolvedTheme)
+        const scheme = lightThemes.includes(resolvedTheme) ? 'light' : 'dark'
+        const meta = document.querySelector('meta[name="color-scheme"]')
+        if (meta) meta.content = scheme
+      }
+    </script>
+  </head>
+  <body class="overflow-hidden select-none">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

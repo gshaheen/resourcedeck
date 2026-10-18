@@ -1,0 +1,10 @@
+node_modules/
+out/
+dist/
+*.log
+.DS_Store
+*.backup-*.rdeck
+*.rdeck-shm
+*.rdeck-wal
+.env
+.env.*

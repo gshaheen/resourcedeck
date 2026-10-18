@@ -1,0 +1,32 @@
+appId: com.resourcedeck.app
+productName: resourcedeck
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md,DEVELOPMENT.md}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json,vitest.config.ts}'
+asarUnpack:
+  - '**/*.node'
+fileAssociations:
+  - ext: rdeck
+    name: resourcedeck Plan
+    description: resourcedeck Portfolio & Capacity Plan
+    role: Editor
+mac:
+  category: public.app-category.business
+  target:
+    - dmg
+    - zip
+win:
+  target:
+    - nsis
+    - zip
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+publish:
+  provider: github
+  releaseType: release

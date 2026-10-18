@@ -1,0 +1,300 @@
+@import "tailwindcss";
+
+/*
+ * resourcedeck — Clean, Technical, Architectural Design System
+ * Defaulting to crisp light paper/ink palette with sharp hairlines and Plus Jakarta Sans tabular numerals.
+ */
+
+:root {
+  --font-sans: 'Plus Jakarta Sans Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Fraunces Variable', Georgia, serif;
+
+  color-scheme: light dark;
+  --bg-canvas: #f6f6f4;
+  --bg-surface: #ffffff;
+  --bg-elevated: #efefeb;
+  --bg-hover: #e5e5e0;
+  --text-primary: #141413;
+  --text-secondary: #52524e;
+  --text-muted: #787872;
+  --border-subtle: #e2e2dc;
+  --border-strong: #c8c8c0;
+  --accent-primary: #1d4ed8;
+  --accent-primary-hover: #1e40af;
+  --accent-secondary: #0f766e;
+  --brand-primary: var(--accent-primary);
+  --brand-logo: #1f2023;
+  --chart-capacity: #dc2626;
+  --chart-demand: #0f766e;
+  --chart-tentative: #94a3b8;
+  --chart-budget: #dc2626;
+  --chart-cost: #1d4ed8;
+  --chart-capex: #334155;
+  --chart-opex: #0f766e;
+  --status-overrun: #dc2626;
+  --status-overrun-bg: rgba(220, 38, 38, 0.1);
+  --status-optimal: #15803d;
+  --status-optimal-bg: rgba(21, 128, 61, 0.1);
+  --status-bench: #b45309;
+  --status-bench-bg: rgba(180, 83, 9, 0.1);
+  --scrollbar-thumb: #c8c8c0;
+  --scrollbar-track: transparent;
+}
+
+/* 1. Architectural Daylight (Default Crisp Light) */
+html[data-theme="boardroom-daylight"] {
+  color-scheme: light;
+  --bg-canvas: #f6f6f4;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f0f0ec;
+  --bg-hover: #e6e6e0;
+  --text-primary: #141413;
+  --text-secondary: #52524e;
+  --text-muted: #787872;
+  --border-subtle: #e2e2dc;
+  --border-strong: #c8c8c0;
+  --accent-primary: #1d4ed8;
+  --accent-primary-hover: #1e40af;
+  --accent-secondary: #0f766e;
+  --brand-logo: #1f2023;
+  --chart-capacity: #dc2626;
+  --chart-demand: #0f766e;
+  --chart-tentative: #94a3b8;
+  --chart-budget: #dc2626;
+  --chart-cost: #2563eb;
+  --chart-capex: #1e293b;
+  --chart-opex: #0f766e;
+  --status-overrun: #dc2626;
+  --status-overrun-bg: rgba(220, 38, 38, 0.1);
+  --status-optimal: #15803d;
+  --status-optimal-bg: rgba(21, 128, 61, 0.1);
+  --status-bench: #b45309;
+  --status-bench-bg: rgba(180, 83, 9, 0.1);
+  --scrollbar-thumb: #c8c8c0;
+  --scrollbar-track: #f6f6f4;
+}
+
+/* 2. Warm Paper (Editorial Light) */
+html[data-theme="warm-paper"] {
+  color-scheme: light;
+  --bg-canvas: #f3efe6;
+  --bg-surface: #faf8f3;
+  --bg-elevated: #eae4d7;
+  --bg-hover: #dfd8c8;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #78716c;
+  --border-subtle: #dcd5c7;
+  --border-strong: #c4bba8;
+  --accent-primary: #9a3412;
+  --accent-primary-hover: #7c2d12;
+  --accent-secondary: #166534;
+  --brand-logo: #23211e;
+  --chart-capacity: #b91c1c;
+  --chart-demand: #3f6212;
+  --chart-tentative: #a8a29e;
+  --chart-budget: #b91c1c;
+  --chart-cost: #9a3412;
+  --chart-capex: #44403c;
+  --chart-opex: #0f766e;
+  --status-overrun: #b91c1c;
+  --status-overrun-bg: rgba(185, 28, 28, 0.11);
+  --status-optimal: #166534;
+  --status-optimal-bg: rgba(22, 101, 52, 0.11);
+  --status-bench: #9a3412;
+  --status-bench-bg: rgba(154, 52, 18, 0.11);
+  --scrollbar-thumb: #c4bba8;
+  --scrollbar-track: #f3efe6;
+}
+
+/* 3. Nordic Frost (Technical Cool Light) */
+html[data-theme="nordic-frost"] {
+  color-scheme: light;
+  --bg-canvas: #f1f5f9;
+  --bg-surface: #ffffff;
+  --bg-elevated: #e2e8f0;
+  --bg-hover: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --border-subtle: #cbd5e1;
+  --border-strong: #94a3b8;
+  --accent-primary: #0369a1;
+  --accent-primary-hover: #075985;
+  --accent-secondary: #0f766e;
+  --brand-logo: #1e293b;
+  --chart-capacity: #e11d48;
+  --chart-demand: #0284c7;
+  --chart-tentative: #94a3b8;
+  --chart-budget: #e11d48;
+  --chart-cost: #0d9488;
+  --chart-capex: #1e293b;
+  --chart-opex: #0d9488;
+  --status-overrun: #e11d48;
+  --status-overrun-bg: rgba(225, 29, 72, 0.1);
+  --status-optimal: #0d9488;
+  --status-optimal-bg: rgba(13, 148, 136, 0.1);
+  --status-bench: #b45309;
+  --status-bench-bg: rgba(180, 83, 9, 0.1);
+  --scrollbar-thumb: #94a3b8;
+  --scrollbar-track: #f1f5f9;
+}
+
+/* 4. Executive Slate (Dark) */
+html[data-theme="executive-slate"] {
+  color-scheme: dark;
+  --bg-canvas: #111317;
+  --bg-surface: #181b20;
+  --bg-elevated: #21252d;
+  --bg-hover: #2a2f3a;
+  --text-primary: #ededec;
+  --text-secondary: #a0a6b2;
+  --text-muted: #6d7380;
+  --border-subtle: #282d37;
+  --border-strong: #3a414e;
+  --accent-primary: #3b82f6;
+  --accent-primary-hover: #60a5fa;
+  --accent-secondary: #10b981;
+  --brand-logo: #e5e7eb;
+  --chart-capacity: #f43f5e;
+  --chart-demand: #38bdf8;
+  --chart-tentative: #64748b;
+  --chart-budget: #f43f5e;
+  --chart-cost: #60a5fa;
+  --chart-capex: #60a5fa;
+  --chart-opex: #2dd4bf;
+  --status-overrun: #f43f5e;
+  --status-overrun-bg: rgba(244, 63, 94, 0.16);
+  --status-optimal: #10b981;
+  --status-optimal-bg: rgba(16, 185, 129, 0.15);
+  --status-bench: #f59e0b;
+  --status-bench-bg: rgba(245, 158, 11, 0.15);
+  --scrollbar-thumb: #3a414e;
+  --scrollbar-track: #111317;
+}
+
+/* 5. Midnight Carbon (Warm Dark) */
+html[data-theme="midnight-velvet"] {
+  color-scheme: dark;
+  --bg-canvas: #0d0d0c;
+  --bg-surface: #161614;
+  --bg-elevated: #20201d;
+  --bg-hover: #2b2b27;
+  --text-primary: #f2f0ea;
+  --text-secondary: #a8a49c;
+  --text-muted: #737068;
+  --border-subtle: #292824;
+  --border-strong: #3d3b36;
+  --accent-primary: #d97706;
+  --accent-primary-hover: #f59e0b;
+  --accent-secondary: #10b981;
+  --brand-logo: #e7e5e0;
+  --chart-capacity: #fb7185;
+  --chart-demand: #f59e0b;
+  --chart-tentative: #78716c;
+  --chart-budget: #fb7185;
+  --chart-cost: #34d399;
+  --chart-capex: #f59e0b;
+  --chart-opex: #2dd4bf;
+  --status-overrun: #fb7185;
+  --status-overrun-bg: rgba(251, 113, 133, 0.16);
+  --status-optimal: #34d399;
+  --status-optimal-bg: rgba(52, 211, 153, 0.15);
+  --status-bench: #fbbf24;
+  --status-bench-bg: rgba(251, 191, 36, 0.15);
+  --scrollbar-thumb: #3d3b36;
+  --scrollbar-track: #0d0d0c;
+}
+
+/* 6. High-Contrast Projector */
+html[data-theme="high-contrast"] {
+  color-scheme: light;
+  --bg-canvas: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f4f4f5;
+  --bg-hover: #e4e4e7;
+  --text-primary: #000000;
+  --text-secondary: #18181b;
+  --text-muted: #3f3f46;
+  --border-subtle: #a1a1aa;
+  --border-strong: #27272a;
+  --accent-primary: #0038a8;
+  --accent-primary-hover: #00287a;
+  --accent-secondary: #006b3f;
+  --brand-logo: #18181b;
+  --chart-capacity: #d00000;
+  --chart-demand: #00509d;
+  --chart-tentative: #71717a;
+  --chart-budget: #d00000;
+  --chart-cost: #006b3f;
+  --chart-capex: #18181b;
+  --chart-opex: #006b3f;
+  --status-overrun: #d00000;
+  --status-overrun-bg: rgba(208, 0, 0, 0.14);
+  --status-optimal: #007200;
+  --status-optimal-bg: rgba(0, 114, 0, 0.14);
+  --status-bench: #b45309;
+  --status-bench-bg: rgba(180, 83, 9, 0.14);
+  --scrollbar-thumb: #52525b;
+  --scrollbar-track: #f4f4f5;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  accent-color: var(--accent-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Editorial Section Titles */
+.font-editorial {
+  font-family: var(--font-serif);
+  font-variation-settings: "SOFT" 30, "WONK" 0;
+  letter-spacing: -0.015em;
+}
+
+/* Humanist Tabular Numerals (Plus Jakarta Sans OpenType tnum + lnum) */
+.tabular-nums {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 0px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 1.5px solid var(--accent-primary);
+  outline-offset: 1px;
+}
+
+.app-drag-region {
+  -webkit-app-region: drag;
+}
+.app-no-drag {
+  -webkit-app-region: no-drag;
+}
+
