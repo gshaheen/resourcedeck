@@ -51,6 +51,7 @@ export interface RDeckBridgeApi {
     jsonBundle: string
   }>
   exportTextFile: (defaultFilename: string, content: string) => Promise<string | null>
+  openExternalUrl: (url: string) => Promise<boolean>
   quitAndInstallUpdate: () => Promise<void>
   onExternalFileOpened: (callback: (filePath: string) => void) => () => void
   onUpdateStatus: (
@@ -84,6 +85,7 @@ const rdeckApi: RDeckBridgeApi = {
     ipcRenderer.invoke('rdeck:generateAiContextPack', scenarioId),
   exportTextFile: (defaultFilename, content) =>
     ipcRenderer.invoke('rdeck:exportTextFile', defaultFilename, content),
+  openExternalUrl: (url) => ipcRenderer.invoke('rdeck:openExternalUrl', url),
   quitAndInstallUpdate: () => ipcRenderer.invoke('rdeck:quitAndInstallUpdate'),
   onExternalFileOpened: (callback) => {
     const handler = (_event: unknown, filePath: string): void => callback(filePath)

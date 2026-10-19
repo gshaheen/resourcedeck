@@ -140,8 +140,8 @@ Every `.rdeck` file is an open, self-documenting SQLite database. Tap **`Cmd/Ctr
 
 Download the latest standalone desktop application for your operating system:
 
-* **[Download for macOS (.dmg)](https://github.com/georgeshaheen/resourcedeck/releases/latest/download/resourcedeck-mac.dmg)** (Universal binary: Apple Silicon & Intel)
-* **[Download for Windows (.exe)](https://github.com/georgeshaheen/resourcedeck/releases/latest/download/resourcedeck-win.exe)** (64-bit installer for Windows 10/11)
+* **[Download for macOS (.dmg)](https://github.com/gshaheen/resourcedeck/releases/latest/download/resourcedeck-mac.dmg)** (Universal binary: Apple Silicon & Intel)
+* **[Download for Windows (.exe)](https://github.com/gshaheen/resourcedeck/releases/latest/download/resourcedeck-win.exe)** (64-bit installer for Windows 10/11)
 
 No servers to configure, no cloud accounts, and no complex setup. Download the installer, double-click to install, and start planning immediately.
 
@@ -155,7 +155,7 @@ For engineers and contributors building from source:
 
 ```bash
 # Clone the repository
-git clone https://github.com/georgeshaheen/resourcedeck.git
+git clone https://github.com/gshaheen/resourcedeck.git
 cd resourcedeck
 
 # Install dependencies and launch in development mode

@@ -8,7 +8,8 @@ import {
   Redo2,
   Download,
   RotateCcw,
-  ChevronDown
+  ChevronDown,
+  MessageSquareHeart
 } from 'lucide-react'
 import { useDeckStore } from '../store/useDeckStore'
 import type { ThemeId } from '../../../shared/types'
@@ -43,6 +44,8 @@ const THEME_GROUPS: {
   }
 ]
 
+const FEEDBACK_URL = 'https://forms.gle/f6RnKb6bB9ERhKQp8'
+
 interface TopBarProps {
   onExportExecutiveSlide: () => void
   onExportCsvReport: () => void
@@ -54,6 +57,14 @@ export const TopBar: React.FC<TopBarProps> = ({
   onExportCsvReport,
   exportStatusMessage
 }) => {
+  const handleOpenFeedback = (): void => {
+    if (window.rdeck?.openExternalUrl) {
+      void window.rdeck.openExternalUrl(FEEDBACK_URL)
+    } else {
+      window.open(FEEDBACK_URL, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   const {
     filePath,
     recentFiles,
@@ -308,6 +319,23 @@ export const TopBar: React.FC<TopBarProps> = ({
                   ))}
                 </>
               )}
+
+              <div
+                className="border-t my-1"
+                style={{ borderColor: 'var(--border-subtle)' }}
+              />
+
+              <button
+                role="menuitem"
+                onClick={() => {
+                  setFileMenuOpen(false)
+                  handleOpenFeedback()
+                }}
+                className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded text-xs text-left hover:bg-black/5"
+              >
+                <MessageSquareHeart className="w-3.5 h-3.5 text-blue-500" />
+                Send Feedback...
+              </button>
             </div>
           )}
         </div>
@@ -627,6 +655,22 @@ export const TopBar: React.FC<TopBarProps> = ({
             </div>
           )}
         </div>
+
+        {/* Send Feedback Button */}
+        <button
+          onClick={handleOpenFeedback}
+          title="Send Feedback (Opens in browser)"
+          aria-label="Send Feedback"
+          className="flex items-center gap-1.5 px-2 py-1 rounded border text-xs font-medium transition-colors hover:opacity-85"
+          style={{
+            backgroundColor: 'var(--bg-elevated)',
+            borderColor: 'var(--border-subtle)',
+            color: 'var(--text-secondary)'
+          }}
+        >
+          <MessageSquareHeart className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+          <span>Send Feedback</span>
+        </button>
 
         <button
           onClick={togglePresentationMode}

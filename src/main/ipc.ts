@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
 import fs from 'fs'
 import path from 'path'
 import type { ScenarioDataset } from '../shared/types'
@@ -273,4 +273,12 @@ export function registerIpcHandlers(): void {
       return result.filePath
     }
   )
+
+  ipcMain.handle('rdeck:openExternalUrl', async (_evt, url: string) => {
+    if (typeof url === 'string' && (url.startsWith('https://') || url.startsWith('http://'))) {
+      await shell.openExternal(url)
+      return true
+    }
+    return false
+  })
 }
