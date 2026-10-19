@@ -160,6 +160,13 @@ function createIco(pngBuffersWithSize) {
 }
 
 async function main() {
+  if (process.platform !== 'darwin') {
+    console.log(
+      `Skipping macOS icon generation on ${process.platform}. Pre-generated icons in build/ and resources/ are preserved.`
+    )
+    return
+  }
+
   console.log('Generating resourcedeck 1024x1024 master icon...')
 
   const buildDir = path.join(rootDir, 'build')
