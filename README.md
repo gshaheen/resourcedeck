@@ -140,10 +140,14 @@ Every `.rdeck` file is an open, self-documenting SQLite database. Tap **`Cmd/Ctr
 
 Download the latest standalone desktop application for your operating system:
 
-* **[Download for macOS (.dmg)](https://github.com/gshaheen/resourcedeck/releases/latest/download/resourcedeck-mac.dmg)** (Universal binary: Apple Silicon & Intel)
+* **[Download for macOS (.dmg)](https://github.com/gshaheen/resourcedeck/releases/latest/download/resourcedeck-mac.dmg)** (Apple Silicon & Intel)
 * **[Download for Windows (.exe)](https://github.com/gshaheen/resourcedeck/releases/latest/download/resourcedeck-win.exe)** (64-bit installer for Windows 10/11)
 
 No servers to configure, no cloud accounts, and no complex setup. Download the installer, double-click to install, and start planning immediately.
+
+> **Note on First-Time Launch (Open Source App)**: Because resourcedeck is an independent, 100% free open-source project without expensive corporate signing certificates:
+> - **macOS**: On first launch, right-click (or Control-click) `resourcedeck.app` and choose **Open**, then click **Open** to confirm. (You can also approve it under *System Settings > Privacy & Security*).
+> - **Windows**: If Windows SmartScreen displays a *"Windows protected your PC"* prompt, simply click **More info** followed by **Run anyway**.
 
 Every plan is a single portable `.rdeck` file—easy to back up, share over corporate drives, or store in Git. Open the included `demo-portfolio.rdeck` sample directly from the app to explore a pre-populated, realistic portfolio.
 

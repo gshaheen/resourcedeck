@@ -18,11 +18,13 @@ fileAssociations:
 mac:
   icon: build/icon.icns
   category: public.app-category.business
+  artifactName: ${productName}-mac.${ext}
   target:
     - dmg
     - zip
 win:
   icon: build/icon.ico
+  artifactName: ${productName}-win.${ext}
   target:
     - nsis
     - zip
