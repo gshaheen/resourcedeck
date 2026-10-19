@@ -8,3 +8,4 @@ dist/
 *.rdeck-wal
 .env
 .env.*
+scripts/*.cjs

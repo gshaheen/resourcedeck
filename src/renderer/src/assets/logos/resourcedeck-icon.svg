@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <defs>
+    <style>
+      :root { --icon-stroke: #121214; }
+      @media (prefers-color-scheme: dark) { :root { --icon-stroke: #f4f4f5; } }
+      .icon-box { stroke: var(--icon-stroke); }
+    </style>
+  </defs>
+  <rect class="icon-box" x="3.25" y="3.25" width="25.5" height="25.5" stroke-width="2.5" shape-rendering="crispEdges" />
+</svg>

@@ -856,3 +856,8 @@ export const useDeckStore = create<DeckState>()(
     }
   )
 )
+
+if (typeof window !== 'undefined') {
+  ;(window as unknown as { useDeckStore: typeof useDeckStore }).useDeckStore = useDeckStore
+}
+

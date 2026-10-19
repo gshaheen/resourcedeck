@@ -13,6 +13,7 @@ import {
 import { useDeckStore } from '../store/useDeckStore'
 import type { ThemeId } from '../../../shared/types'
 import { compareScenarios } from '../../../shared/engine/diffEngine'
+import { Logo } from './Logo'
 
 const THEME_GROUPS: {
   group: string
@@ -135,23 +136,7 @@ export const TopBar: React.FC<TopBarProps> = ({
     >
       {/* Left: Brand, File Switcher, Undo/Redo */}
       <div className="flex items-center gap-2 min-w-0 app-no-drag">
-        <div
-          className="flex items-center gap-1.5 shrink-0"
-          style={{ color: 'var(--brand-logo)' }}
-          title="resourcedeck"
-        >
-          <span
-            className="inline-block w-2.5 h-2.5 shrink-0"
-            style={{ backgroundColor: 'var(--brand-logo)' }}
-            aria-hidden="true"
-          />
-          <span className="font-editorial font-semibold text-sm tracking-tight lowercase hidden xl:inline">
-            resourcedeck
-          </span>
-          <span className="font-editorial font-semibold text-sm tracking-tight lowercase xl:hidden">
-            rd
-          </span>
-        </div>
+        <Logo size="sm" />
 
         <span style={{ color: 'var(--border-strong)' }}>/</span>
 

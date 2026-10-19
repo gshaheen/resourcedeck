@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <defs>
+    <style>
+      :root {
+        --deck-bg: #2563eb;
+        --deck-bar: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --deck-bg: #3b82f6;
+          --deck-bar: #0f172a;
+        }
+      }
+      .deck-bg { fill: var(--deck-bg); }
+      .deck-bar { fill: var(--deck-bar); }
+    </style>
+  </defs>
+  <rect class="deck-bg" x="3" y="3" width="26" height="26" rx="5.5" />
+  <rect class="deck-bar" x="7.5" y="7.5" width="17" height="3.5" rx="1.75" />
+  <rect class="deck-bar" x="7.5" y="14" width="11" height="3.5" rx="1.75" />
+  <rect class="deck-bar" x="7.5" y="20.5" width="17" height="3.5" rx="1.75" />
+</svg>

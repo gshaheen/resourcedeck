@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>resourcedeck — Free & Open Source Resource Capacity & Project Portfolio Planning</title>
+  <meta name="title" content="resourcedeck — Free & Open Source Resource Capacity & Project Portfolio Planning">
+  <meta name="description" content="Free, open source resource capacity and project portfolio planning workbench for PMOs, project managers, and resource leaders. Balance people, projects, and budgets in one unified place without spreadsheet fragility.">
+  <meta name="keywords" content="resource management software, resource capacity planning, project portfolio management, PPM software, free PPM tool, resource allocation, PMO software, capacity vs demand, workload management, what-if scenario planning, PMP project planning, open source project management, offline desktop PPM, resource heatmap">
+  <meta name="author" content="resourcedeck">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://resourcedeck.app/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://resourcedeck.app/">
+  <meta property="og:title" content="resourcedeck — Sophisticated Resource Management & Portfolio Planning. Free Forever.">
+  <meta property="og:description" content="Balance your people, projects, and budgets in one place. Test What-If scenarios against a locked baseline and stop fighting spreadsheets. Free and open source forever.">
+  <meta property="og:image" content="https://resourcedeck.app/images/01-split-timeline-charts.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://resourcedeck.app/">
+  <meta name="twitter:title" content="resourcedeck — Simple & Sophisticated Resource Capacity & Portfolio Planning">
+  <meta name="twitter:description" content="Capture your people, projects, and budgets in one place. Free and open source desktop application for PMOs, project managers, and resource leaders.">
+  <meta name="twitter:image" content="https://resourcedeck.app/images/01-split-timeline-charts.png">
+
+  <!-- Favicon / Brand Mark: Synchronized with resourcedeck logo -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230f172a'/><rect x='8' y='8' width='16' height='16' fill='%232563eb'/></svg>">
+
+  <!-- Structured Data: JSON-LD for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "resourcedeck",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "macOS, Windows",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free and open source resource capacity and project portfolio planning application for PMOs, project managers, and resource planning professionals.",
+    "url": "https://resourcedeck.app/",
+    "license": "https://opensource.org/licenses/MIT",
+    "featureList": [
+      "Real-Time People Capacity vs. Project Demand Modeling",
+      "Interactive Drag-and-Drop Portfolio Timeline & Gantt",
+      "What-If Scenario Branching with Baseline Ghost Bars",
+      "Team & Role Utilization Heatmap with Overrun Alerts",
+      "People, Project, and Monthly Budget Balancing",
+      "Smart Staffing Suggestions & Role Placeholders",
+      "Holiday Schedules & Personal PTO Availability Math",
+      "Distraction-Free Boardroom Presentation Mode",
+      "Single-File Offline SQLite Architecture with Zero Telemetry"
+    ]
+  }
+  </script>
+
+  <!-- Google Fonts: Fraunces & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            editorial: ['"Fraunces"', 'Georgia', 'serif'],
+          },
+          colors: {
+            brand: {
+              DEFAULT: '#0f172a',
+              accent: '#2563eb',
+              surface: '#fcfbf9',
+              elevated: '#ffffff',
+              border: '#e2e8f0',
+              overrun: '#dc2626',
+              optimal: '#16a34a',
+              bench: '#2563eb'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .tabular-nums { font-variant-numeric: tabular-nums lining-nums; }
+    .shadow-soft { box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03); }
+    .shadow-architectural { box-shadow: 0 20px 45px -15px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(15, 23, 42, 0.08); }
+    
+    /* Interactive Gantt-style Nav Pill Hover Effect */
+    .gantt-nav-pill {
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gantt-nav-pill::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background: #2563eb;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.2s ease;
+      border-radius: 9999px;
+    }
+    .gantt-nav-pill:hover::after {
+      transform: scaleX(1);
+    }
+  </style>
+</head>
+<body class="bg-[#fafaf8] text-slate-800 font-sans antialiased selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- Top Announcement Bar: Free & Open Source Commitment -->
+  <aside aria-label="Open Source Guarantee" class="bg-slate-900 text-slate-200 text-xs py-2 px-4 text-center border-b border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-medium">
+      <span class="inline-flex items-center gap-1.5 text-emerald-400">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Free & Open Source Forever</span>
+      </span>
+      <span class="text-slate-500 hidden sm:inline">|</span>
+      <span>No per-seat pricing · No enterprise paywalls · 100% Offline & Private · MIT Licensed</span>
+    </div>
+  </aside>
+
+  <!-- Sticky Header Navigation with Gantt & Capacity UI Elements -->
+  <header class="sticky top-0 z-40 bg-[#fafaf8]/95 backdrop-blur-md border-b border-slate-200/90">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
+      
+      <!-- Left: Logo & Workplace Breadcrumb -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="#" class="flex items-center gap-2.5 group" title="resourcedeck home">
+          <span class="w-3.5 h-3.5 bg-slate-900 group-hover:bg-blue-600 transition-colors shadow-2xs"></span>
+          <span class="font-editorial text-xl font-bold tracking-tight text-slate-900 lowercase">resourcedeck</span>
+        </a>
+        <span class="text-slate-300 hidden md:inline">/</span>
+        <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider hidden md:inline">Portfolio Workbench</span>
+      </div>
+
+      <!-- Center Desktop Nav: Architectural Dock with Gantt/Workload UI Motifs -->
+      <nav aria-label="Main Navigation" class="hidden xl:flex items-center gap-1 p-1 bg-white/80 rounded-lg border border-slate-200 shadow-2xs text-xs font-semibold text-slate-600">
+        
+        <!-- Nav Item 1: People & Budgets (Triad Motif) -->
+        <a href="#core-triad" class="gantt-nav-pill px-3 py-1.5 rounded-md hover:bg-slate-100/80 hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <span class="inline-flex gap-0.5 items-center opacity-70">
+            <span class="w-1.5 h-2 bg-blue-600 rounded-2xs"></span>
+            <span class="w-1.5 h-2.5 bg-emerald-600 rounded-2xs"></span>
+            <span class="w-1.5 h-2 bg-amber-500 rounded-2xs"></span>
+          </span>
+          <span>People & Budgets</span>
+        </a>
+
+        <!-- Nav Item 2: What-If Scenarios (Ghost Bar Motif) -->
+        <a href="#what-if" class="gantt-nav-pill px-3 py-1.5 rounded-md hover:bg-slate-100/80 hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <span class="w-3 h-2 border border-dashed border-purple-500 rounded-2xs inline-block"></span>
+          <span>What-If Scenarios</span>
+        </a>
+
+        <!-- Nav Item 3: Capacity Heatmap (Spectrum Swatch Motif) -->
+        <a href="#heatmap" class="gantt-nav-pill px-3 py-1.5 rounded-md hover:bg-slate-100/80 hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <span class="inline-flex gap-0.5 items-center">
+            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full" title="Bench"></span>
+            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full" title="Optimal"></span>
+            <span class="w-1.5 h-1.5 bg-red-500 rounded-full" title="Overrun"></span>
+          </span>
+          <span>Capacity Heatmap</span>
+        </a>
+
+        <!-- Nav Item 4: Boardroom Reviews (Presentation Shortcut Motif) -->
+        <a href="#presentation" class="gantt-nav-pill px-3 py-1.5 rounded-md hover:bg-slate-100/80 hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <kbd class="px-1 py-0.2 rounded bg-slate-100 border border-slate-300 font-mono text-[9px] text-slate-500">⌘P</kbd>
+          <span>Boardroom Reviews</span>
+        </a>
+
+        <!-- Nav Item 5: Compare Tools (Renamed from Spreadsheets vs PPM) -->
+        <a href="#comparison" class="gantt-nav-pill px-3 py-1.5 rounded-md hover:bg-slate-100/80 hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Compare Tools</span>
+        </a>
+
+        <!-- Nav Item 6: Why Free (MIT Shield Motif) -->
+        <a href="#why-open-source" class="gantt-nav-pill px-3 py-1.5 rounded-md hover:bg-slate-100/80 hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+          <span>Why Free?</span>
+        </a>
+
+      </nav>
+
+      <!-- Right CTAs & Mobile Hamburger -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <a href="https://github.com/georgeshaheen/resourcedeck" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-300 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-2xs">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span class="hidden sm:inline">Star on GitHub</span>
+        </a>
+        <a href="#downloads" class="px-3.5 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors shadow-2xs">
+          Get App
+        </a>
+
+        <!-- Mobile Gantt-Style Hamburger Button -->
+        <button id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="xl:hidden p-2 rounded-md border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 transition-colors" aria-label="Toggle navigation menu" aria-expanded="false">
+          <div class="w-4.5 h-3.5 flex flex-col justify-between">
+            <span class="w-4.5 h-0.5 bg-slate-900 rounded-full"></span>
+            <span class="w-3 h-0.5 bg-blue-600 rounded-full ml-auto"></span>
+            <span class="w-4 h-0.5 bg-slate-900 rounded-full"></span>
+          </div>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Slide-Down Drawer -->
+    <div id="mobile-menu-drawer" class="hidden xl:hidden border-t border-slate-200 bg-[#fafaf8] px-4 pt-3 pb-5 space-y-2 shadow-lg">
+      <a href="#core-triad" onclick="toggleMobileMenu()" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100">
+        <span class="w-2 h-2 bg-blue-600 rounded-2xs"></span>
+        <span>People, Projects & Budgets</span>
+      </a>
+      <a href="#what-if" onclick="toggleMobileMenu()" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100">
+        <span class="w-2 h-2 border border-dashed border-purple-500 rounded-2xs"></span>
+        <span>What-If Scenarios & Ghost Bars</span>
+      </a>
+      <a href="#heatmap" onclick="toggleMobileMenu()" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100">
+        <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+        <span>Team Capacity Heatmap</span>
+      </a>
+      <a href="#presentation" onclick="toggleMobileMenu()" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100">
+        <kbd class="px-1 py-0.2 rounded bg-slate-200 font-mono text-[9px] text-slate-600">⌘P</kbd>
+        <span>Boardroom Reviews</span>
+      </a>
+      <a href="#comparison" onclick="toggleMobileMenu()" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100">
+        <svg class="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span>Compare Tools</span>
+      </a>
+      <a href="#why-open-source" onclick="toggleMobileMenu()" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100">
+        <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+        <span>Why Free & Open Source?</span>
+      </a>
+      <div class="pt-2 border-t border-slate-200 flex gap-2">
+        <a href="#downloads" onclick="toggleMobileMenu()" class="w-full text-center py-2 rounded-md bg-slate-900 text-white text-xs font-semibold">
+          Get Desktop App
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-16 pb-20 overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      
+      <!-- Value Proposition Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white shadow-2xs text-xs font-semibold text-slate-700 mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Free & Open Source Desktop App</span>
+        <span class="text-slate-300">·</span>
+        <span class="text-slate-500 font-medium">For Project Managers, PMOs & Resource Leaders</span>
+      </div>
+
+      <!-- Main Headline tailored to PM/PMO/PMP audience -->
+      <h1 class="font-editorial text-4xl sm:text-5xl lg:text-6xl font-semibold text-slate-900 tracking-tight leading-[1.12] max-w-4xl mx-auto">
+        Sophisticated resource capacity and portfolio planning. <span class="italic text-slate-600">Made simple.</span>
+      </h1>
+
+      <!-- Executive Subheadline focused on outcomes -->
+      <p class="mt-6 text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+        Stop fighting broken spreadsheets and heavyweight enterprise tools. Capture your <strong>people, projects, and budgets in one place</strong> to plan capacity, balance workloads, and answer <em>&ldquo;Can we deliver this on time?&rdquo;</em> with absolute certainty.
+      </p>
+
+      <!-- Action Buttons & Download Options with OS Autodetection -->
+      <div id="downloads" class="mt-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+        <div id="hero-download-buttons" class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+          <a href="https://github.com/georgeshaheen/resourcedeck/releases/latest/download/resourcedeck-mac.dmg" id="btn-mac-hero" class="w-full sm:w-auto px-6 py-3.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2.5">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.38c.62-.75 1.04-1.8 1.04-2.85 0-.15-.01-.29-.04-.43-.99.04-2.18.66-2.89 1.49-.55.63-.99 1.66-.99 2.7 0 .16.03.3.05.37.1.01.24.03.38.03.9 0 1.91-.56 2.45-1.31z"/></svg>
+            <span>Download for Mac</span>
+            <span class="text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-normal">.dmg</span>
+          </a>
+          <a href="https://github.com/georgeshaheen/resourcedeck/releases/latest/download/resourcedeck-win.exe" id="btn-win-hero" class="w-full sm:w-auto px-6 py-3.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-sm transition-colors shadow-2xs flex items-center justify-center gap-2.5">
+            <svg class="w-4 h-4 text-slate-700 fill-current" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.95-1.801"/></svg>
+            <span>Download for Windows</span>
+            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-normal">.exe</span>
+          </a>
+        </div>
+        <p id="hero-platform-subtext" class="mt-3 text-xs text-slate-500 font-medium">Free & Open Source desktop app for macOS (Apple Silicon & Intel) & Windows</p>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500 font-medium">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          Free & Open Source Forever
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          100% Offline & Private (Zero Telemetry)
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          Single Portable <code class="font-mono text-slate-700">.rdeck</code> File
+        </span>
+      </div>
+
+      <!-- Hero Masterpiece Screenshot with Click-to-Zoom Cue -->
+      <div id="showcase" class="mt-14 relative max-w-5xl mx-auto group">
+        <div class="rounded-xl overflow-hidden shadow-architectural border border-slate-300 bg-white p-1.5 cursor-zoom-in relative" onclick="openLightbox('./images/01-split-timeline-charts.png', 'resourcedeck Executive Split Workspace — Gantt timeline synchronized with real-time monthly human capacity and budget charts with Overrun Red alerts.')">
+          <img src="./images/01-split-timeline-charts.png" alt="resourcedeck Executive Split Workspace showing portfolio timeline and synchronized capacity vs demand charts with Overrun Red detection" class="w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-[1.004]" loading="eager">
+          <div class="absolute bottom-4 right-4 bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold px-2.5 py-1 rounded shadow-md flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+            <span>Click to Zoom</span>
+          </div>
+        </div>
+        <div class="mt-3 flex flex-wrap items-center justify-between text-xs text-slate-500 px-2 gap-2">
+          <span><strong>Executive Split Workspace:</strong> Tactile Gantt timeline synchronized with real-time monthly human capacity and budget charts.</span>
+          <span class="tabular-nums font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">Apex Global Fintech FY26 Portfolio Plan</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- The PMO Dilemma: Questions answered in seconds -->
+  <section class="py-16 border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">Purpose-Built for Leaders</span>
+        <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight mt-1">
+          The questions Project Managers and PMOs answer every week
+        </h2>
+        <p class="mt-3 text-slate-600 text-sm sm:text-base">
+          Spreadsheets break when formulas get complex. Enterprise tools take months to configure. resourcedeck provides immediate, deterministic answers.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <div class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Demand Feasibility</div>
+          <h3 class="font-editorial text-lg font-semibold text-slate-900">&ldquo;Can we take on this new initiative in Q3?&rdquo;</h3>
+          <p class="text-xs sm:text-sm text-slate-600">Stage candidate projects in your deck and drag them onto the timeline. Instant capacity charts reveal whether your team can absorb the hours without overtime.</p>
+        </div>
+
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <div class="text-xs font-semibold text-red-600 uppercase tracking-wider">Burnout Prevention</div>
+          <h3 class="font-editorial text-lg font-semibold text-slate-900">&ldquo;Who is overloaded, and who has available bench?&rdquo;</h3>
+          <p class="text-xs sm:text-sm text-slate-600">The People × Months utilization matrix flags bottlenecks above 100% in red and highlights available bandwidth so you balance workload fairly.</p>
+        </div>
+
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <div class="text-xs font-semibold text-purple-600 uppercase tracking-wider">Trade-off Analysis</div>
+          <h3 class="font-editorial text-lg font-semibold text-slate-900">&ldquo;What if we delay Project A by 6 weeks?&rdquo;</h3>
+          <p class="text-xs sm:text-sm text-slate-600">Branch a What-If scenario in one click. Dashed Baseline Ghost Bars show previous dates, while the diff drawer quantifies exact cost and hour changes.</p>
+        </div>
+
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <div class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Executive Confidence</div>
+          <h3 class="font-editorial text-lg font-semibold text-slate-900">&ldquo;Are our project costs aligned with monthly budgets?&rdquo;</h3>
+          <p class="text-xs sm:text-sm text-slate-600">Step into executive steering committees with synchronized spend charts that highlight cost overruns the moment dates or allocations move.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Core Triad: People, Projects, Budgets -->
+  <section id="core-triad" class="py-20 border-t border-slate-200 bg-[#fafaf8]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Unified Portfolio Model</span>
+        <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight mt-1">
+          Capture your People, Projects, and Budgets in one place
+        </h2>
+        <p class="mt-4 text-base text-slate-600">
+          The foundation of sound resource management is keeping supply, demand, and financials aligned. resourcedeck unites all three seamlessly.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Pillar 1: People & Supply -->
+        <div class="rounded-xl border border-slate-300 bg-white p-6 shadow-soft space-y-4">
+          <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+          <h3 class="font-editorial text-2xl font-semibold text-slate-900">Your People (Supply)</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Model your real organizational capacity. Define roles, departments, skill tags, hourly cost rates, and daily working hours.
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-700 pt-2 border-t border-slate-100">
+            <li class="flex items-start gap-2">
+              <span class="text-blue-600 font-bold">✓</span>
+              <span><strong>TBD Hiring Placeholders:</strong> Plan future headcount with start dates.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-blue-600 font-bold">✓</span>
+              <span><strong>Holidays & PTO:</strong> Automatically deducts company shutdown weeks and personal time off.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-blue-600 font-bold">✓</span>
+              <span><strong>Flexible Allocations:</strong> Assign by Total Hours, Hours/Day, or % Capacity.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 2: Projects & Demand -->
+        <div class="rounded-xl border border-slate-300 bg-white p-6 shadow-soft space-y-4">
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          </div>
+          <h3 class="font-editorial text-2xl font-semibold text-slate-900">Your Projects (Demand)</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Stage scheduled initiatives alongside candidate backlog ideas. Prioritize by strategic ROI value score and track milestones.
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-700 pt-2 border-t border-slate-100">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Projects on Deck:</strong> Backlog staging area for unscheduled pipeline candidates.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Milestones & Dependencies:</strong> Diamond target markers and cross-project links.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span><strong>Confirmed vs. Tentative:</strong> Visual certainty tracking across your pipeline.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 3: Budgets & Financials -->
+        <div class="rounded-xl border border-slate-300 bg-white p-6 shadow-soft space-y-4">
+          <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-editorial text-2xl font-semibold text-slate-900">Your Budgets (Financials)</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Set monthly budget limits and watch projected costs update instantly. Highlight budget overruns in red before leadership reviews.
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-700 pt-2 border-t border-slate-100">
+            <li class="flex items-start gap-2">
+              <span class="text-amber-600 font-bold">✓</span>
+              <span><strong>Automatic Overrun Red:</strong> Instant alerts whenever demand or spend exceeds limits.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-600 font-bold">✓</span>
+              <span><strong>Lump-Sum or Hourly Costing:</strong> Fixed project budgets or calculated from labor rates.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-600 font-bold">✓</span>
+              <span><strong>Forecast Burn Rates:</strong> Automated monthly spend projections and variance tracking.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 1: What-If Scenario Branching -->
+  <section id="what-if" class="py-20 border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-5 space-y-5">
+          <span class="text-xs font-semibold uppercase tracking-wider text-purple-600">Decision-Making Safety</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight leading-snug">
+            Test roadmap changes safely against your approved baseline
+          </h2>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            Never overwrite an approved baseline plan just to test a trade-off. Fork a What-If scenario branch in one click to experiment freely with project timing, staffing reallocations, or scope shifts.
+          </p>
+          <div class="space-y-3 text-sm text-slate-700">
+            <div class="p-3.5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-1">
+              <div class="font-semibold text-slate-900 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 border-2 border-dashed border-purple-600 rounded-2xs"></span>
+                <span>Baseline Ghost Bars</span>
+              </div>
+              <p class="text-xs text-slate-600">Dashed outlines remain visible on the Gantt timeline, showing exactly where projects lived in the approved plan while you drag new dates.</p>
+            </div>
+
+            <div class="p-3.5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-1">
+              <div class="font-semibold text-slate-900 flex items-center gap-2">
+                <span class="text-blue-600 font-bold">Δ</span>
+                <span>Scenario Diff Drawer</span>
+              </div>
+              <p class="text-xs text-slate-600">Inspect date shifts, net hours variance, and dollar delta changes across your entire portfolio in a clean slide-out drawer.</p>
+            </div>
+
+            <div class="p-3.5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-1">
+              <div class="font-semibold text-slate-900 flex items-center gap-2">
+                <span class="text-emerald-600 font-bold">↗</span>
+                <span>1-Click Promotion to Baseline</span>
+              </div>
+              <p class="text-xs text-slate-600">When the executive steering committee approves your scenario, promote the branch to become the new official Baseline with one click.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="rounded-xl overflow-hidden shadow-architectural border border-slate-300 bg-white p-1 cursor-zoom-in relative group" onclick="openLightbox('./images/02-what-if-ghost-bars-diff.png', 'resourcedeck What-If Scenario Diff Drawer — Comparing What-If branch against Baseline. Resolves 2 overrun months down to 0 with ghost bars showing the 55-day project shift.')">
+            <img src="./images/02-what-if-ghost-bars-diff.png" alt="resourcedeck What-If Scenario Diff Drawer and Baseline Ghost Bars on timeline" class="w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-[1.004]">
+            <div class="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <span>Zoom</span>
+            </div>
+          </div>
+          <div class="mt-2 text-center text-xs text-slate-500">
+            What-If Scenario Diff Drawer: Resolving 2 overrun months down to 0 with ghost bars showing the 55-day project shift.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 2: Utilization Heatmap -->
+  <section id="heatmap" class="py-20 border-t border-slate-200 bg-[#fafaf8]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7 order-2 lg:order-1">
+          <div class="rounded-xl overflow-hidden shadow-architectural border border-slate-300 bg-white p-1 cursor-zoom-in relative group" onclick="openLightbox('./images/03-utilization-heatmap.png', 'resourcedeck Team & Role Utilization Heatmap — Color-coded matrix by monthly load percentage with instant project hour drill-downs.')">
+            <img src="./images/03-utilization-heatmap.png" alt="resourcedeck Team and Role Utilization Heatmap matrix" class="w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-[1.004]">
+            <div class="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <span>Zoom</span>
+            </div>
+          </div>
+          <div class="mt-2 text-center text-xs text-slate-500">
+            Team Utilization Matrix: Color-coded by load percentage with instant drill-down into individual project contributions.
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 order-1 lg:order-2 space-y-5">
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-600">Workload Visibility</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight leading-snug">
+            Spot team burnout and available bench capacity instantly
+          </h2>
+          <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+            The Team & Role Utilization Heatmap organizes your resources across months into an intuitive, color-coded matrix. View by individual person, grouped by Department, or aggregated by Role.
+          </p>
+
+          <div class="grid grid-cols-3 gap-3 text-center text-xs">
+            <div class="p-3.5 rounded-lg border border-blue-200 bg-blue-50/70">
+              <div class="font-bold text-blue-900 text-sm sm:text-base">&lt; 70%</div>
+              <div class="text-blue-700 font-medium mt-1">Available Bench</div>
+              <div class="text-[11px] text-blue-600/80 mt-0.5">Capacity to absorb new work</div>
+            </div>
+            <div class="p-3.5 rounded-lg border border-emerald-200 bg-emerald-50/70">
+              <div class="font-bold text-emerald-900 text-sm sm:text-base">70 – 100%</div>
+              <div class="text-emerald-700 font-medium mt-1">Optimal Load</div>
+              <div class="text-[11px] text-emerald-600/80 mt-0.5">Healthy, productive delivery</div>
+            </div>
+            <div class="p-3.5 rounded-lg border border-red-200 bg-red-50/70">
+              <div class="font-bold text-red-900 text-sm sm:text-base">&gt; 100%</div>
+              <div class="text-red-700 font-medium mt-1">Over-Allocated</div>
+              <div class="text-[11px] text-red-600/80 mt-0.5">Burnout and delivery risk</div>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-500 pt-2 border-t border-slate-200">
+            Click any cell to open an instant breakdown of exactly which projects are driving that person&rsquo;s hours for the month.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 3: Smart Staffing & Boardroom Presentation -->
+  <section id="presentation" class="py-20 border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Presentation Ready</span>
+        <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight mt-1">
+          Designed for live Zoom reviews and boardroom steering committees
+        </h2>
+        <p class="mt-4 text-base text-slate-600">
+          No awkward formula recalculation during executive presentations. resourcedeck is tuned for clarity, speed, and numerical legibility.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Smart Staffing Modal -->
+        <div class="rounded-xl border border-slate-300 bg-[#fafaf8] p-5 shadow-soft space-y-4">
+          <div class="rounded-lg overflow-hidden border border-slate-200 bg-white cursor-zoom-in relative group" onclick="openLightbox('./images/04-smart-staffing-modal.png', 'resourcedeck Smart Staffing & Allocation Manager — Ranking candidate team members by skill match and open capacity windows.')">
+            <img src="./images/04-smart-staffing-modal.png" alt="resourcedeck Smart Staffing and Project Details dialog" class="w-full h-auto transition-transform duration-300 group-hover:scale-[1.004]">
+            <div class="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <span>Zoom</span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-editorial text-xl font-semibold text-slate-900">Smart Staffing & Skills Matcher</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              When assigning staff to a project, click <em>&ldquo;Suggest Available Staff&rdquo;</em>. The engine scans your organization and ranks team members by required skill match and open bandwidth in that exact date window.
+            </p>
+          </div>
+        </div>
+
+        <!-- Boardroom Presentation Mode -->
+        <div class="rounded-xl border border-slate-300 bg-[#fafaf8] p-5 shadow-soft space-y-4">
+          <div class="rounded-lg overflow-hidden border border-slate-200 bg-white cursor-zoom-in relative group" onclick="openLightbox('./images/05-presentation-mode-dark.png', 'resourcedeck Boardroom Presentation Mode (Cmd+P) in Executive Slate Dark theme — Distraction-free high-contrast display with Executive KPI summary cards.')">
+            <img src="./images/05-presentation-mode-dark.png" alt="resourcedeck Boardroom Presentation Mode in Slate Dark theme" class="w-full h-auto transition-transform duration-300 group-hover:scale-[1.004]">
+            <div class="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <span>Zoom</span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-editorial text-xl font-semibold text-slate-900">Distraction-Free Presentation Mode (Cmd+P)</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Press <strong>Cmd+P</strong> to collapse sidebars and toolbars. Surfaces high-level Executive KPI cards (Spend vs. Budget, Overrun Count, Active Portfolio) with high-contrast themes and tabular typography.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive 4: Realistic Availability Math & Open Architecture -->
+  <section class="py-20 border-t border-slate-200 bg-[#fafaf8]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        
+        <!-- Holiday/PTO Availability -->
+        <div class="space-y-4">
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">Operational Precision</span>
+          <h2 class="font-editorial text-3xl font-semibold text-slate-900 tracking-tight">
+            Realistic availability math that accounts for holidays and PTO
+          </h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Human capacity isn&rsquo;t 160 hours every month. resourcedeck accounts for real business calendars: company-wide federal holidays, year-end shutdowns, and personal PTO.
+          </p>
+          <div class="rounded-lg overflow-hidden border border-slate-300 shadow-soft bg-white cursor-zoom-in relative group" onclick="openLightbox('./images/07-realistic-availability.png', 'resourcedeck Company-Wide Holiday Schedule and PTO Manager — Automatic deduction of holidays and time-off with exact weekday proration.')">
+            <img src="./images/07-realistic-availability.png" alt="resourcedeck Company-Wide Holiday Schedule and PTO Manager" class="w-full h-auto transition-transform duration-300 group-hover:scale-[1.004]">
+            <div class="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <span>Zoom</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI-Ready Data Layer -->
+        <div class="space-y-4">
+          <span class="text-xs font-semibold uppercase tracking-wider text-purple-600">AI-Ready Data Layer</span>
+          <h2 class="font-editorial text-3xl font-semibold text-slate-900 tracking-tight">
+            1-Click AI Data Bridge for ChatGPT, Claude & Gemini
+          </h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Need an executive briefing written or an AI risk assessment? Tap <strong>Cmd+Shift+A</strong> to generate a structured Markdown context pack with pre-computed monthly rollups ready to paste into any LLM.
+          </p>
+          <div class="rounded-lg overflow-hidden border border-slate-300 shadow-soft bg-white cursor-zoom-in relative group" onclick="openLightbox('./images/06-ai-data-bridge.png', 'resourcedeck 1-Click AI Data Bridge — Pre-joined SQL views, schema README, and clean Markdown context pack for LLMs.')">
+            <img src="./images/06-ai-data-bridge.png" alt="resourcedeck 1-Click AI Data Bridge for ChatGPT and Claude" class="w-full h-auto transition-transform duration-300 group-hover:scale-[1.004]">
+            <div class="absolute bottom-3 right-3 bg-slate-900/85 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <span>Zoom</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Free & Open Source Forever -->
+  <section id="why-open-source" class="py-20 border-t border-slate-200 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+        <span>MIT Licensed · Zero Telemetry · 100% Free Forever</span>
+      </div>
+      <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight">
+        Why resourcedeck is free and open source forever
+      </h2>
+      <p class="text-base text-slate-600 leading-relaxed">
+        Enterprise resource planning tools charge $50 to $100 per user per month while locking your strategic plans inside proprietary clouds. We believe project managers and resource leaders deserve a fast, reliable desktop workbench that respects their privacy, runs 100% offline, and costs nothing.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 text-left">
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fafaf8] space-y-2">
+          <div class="font-semibold text-slate-900 text-sm">No Per-Seat Licenses</div>
+          <p class="text-xs text-slate-600">Share plans with your PMO, coordinators, and directors without worrying about seat fees or license tiers.</p>
+        </div>
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fafaf8] space-y-2">
+          <div class="font-semibold text-slate-900 text-sm">You Own Your Data Forever</div>
+          <p class="text-xs text-slate-600">Every plan is stored locally in an open SQLite (<code class="text-xs">.rdeck</code>) file. No vendor lock-in, ever.</p>
+        </div>
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fafaf8] space-y-2">
+          <div class="font-semibold text-slate-900 text-sm">Absolute Privacy</div>
+          <p class="text-xs text-slate-600">Zero telemetry. Your staffing rates, project budgets, and employee names never touch a cloud server.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Matrix: resourcedeck vs Spreadsheets vs Cloud PPM (Mobile Scrollable) -->
+  <section id="comparison" class="py-20 border-t border-slate-200 bg-[#fafaf8]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Compare Tools</span>
+        <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight mt-1">
+          Spreadsheets vs. Heavyweight PPMs vs. resourcedeck
+        </h2>
+        <p class="mt-3 text-slate-600 text-sm sm:text-base">
+          Why project and resource managers choose resourcedeck over fragile spreadsheets and complex enterprise software.
+        </p>
+      </div>
+
+      <!-- Mobile Scroll Hint -->
+      <div class="sm:hidden text-center text-xs text-slate-500 mb-2 flex items-center justify-center gap-1">
+        <span>← Swipe to compare all columns →</span>
+      </div>
+
+      <!-- Horizontally Scrollable Table Container on Mobile -->
+      <div class="rounded-xl border border-slate-300 bg-white overflow-x-auto shadow-soft">
+        <table class="w-full text-left text-sm min-w-[620px]">
+          <thead class="bg-slate-100/80 border-b border-slate-200 text-slate-700 font-semibold">
+            <tr>
+              <th class="py-3.5 px-4 sm:px-6 w-1/4">Capability</th>
+              <th class="py-3.5 px-4 text-emerald-800 bg-emerald-50/70 font-editorial font-bold w-1/4">resourcedeck</th>
+              <th class="py-3.5 px-4 text-slate-500 w-1/4">Excel / Google Sheets</th>
+              <th class="py-3.5 px-4 text-slate-500 w-1/4">Enterprise Cloud PPM</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr>
+              <td class="py-3.5 px-4 sm:px-6 font-medium text-slate-900">Cost & Licensing</td>
+              <td class="py-3.5 px-4 text-emerald-700 bg-emerald-50/30 font-semibold">Free & Open Source Forever</td>
+              <td class="py-3.5 px-4 text-slate-500">Part of Office / Workspace</td>
+              <td class="py-3.5 px-4 text-slate-500">$50–$100+ / user / month</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 sm:px-6 font-medium text-slate-900">Tactile Drag-and-Drop Timeline</td>
+              <td class="py-3.5 px-4 text-emerald-700 bg-emerald-50/30 font-semibold">Native, dynamic Gantt</td>
+              <td class="py-3.5 px-4 text-slate-500">Rigid cell date formulas</td>
+              <td class="py-3.5 px-4 text-slate-500">Slow, rigid web canvas</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 sm:px-6 font-medium text-slate-900">What-If Scenario Modeling</td>
+              <td class="py-3.5 px-4 text-emerald-700 bg-emerald-50/30 font-semibold">1-Click Branch, Ghost Bars & Diff</td>
+              <td class="py-3.5 px-4 text-slate-500">Fragile copy-pasted tabs</td>
+              <td class="py-3.5 px-4 text-slate-500">Complex administrator setup</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 sm:px-6 font-medium text-slate-900">Live Overrun Red Alerts</td>
+              <td class="py-3.5 px-4 text-emerald-700 bg-emerald-50/30 font-semibold">Instant Capacity & Budget Red</td>
+              <td class="py-3.5 px-4 text-slate-500">Manual conditional formatting</td>
+              <td class="py-3.5 px-4 text-slate-500">Delayed batch syncs</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 sm:px-6 font-medium text-slate-900">Setup & Onboarding Time</td>
+              <td class="py-3.5 px-4 text-emerald-700 bg-emerald-50/30 font-semibold">&lt; 2 minutes (Zero setup)</td>
+              <td class="py-3.5 px-4 text-slate-500">Weeks of formula building</td>
+              <td class="py-3.5 px-4 text-slate-500">3 to 6 months implementation</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 sm:px-6 font-medium text-slate-900">Privacy & Data Security</td>
+              <td class="py-3.5 px-4 text-emerald-700 bg-emerald-50/30 font-semibold">100% Offline · Local SQLite File</td>
+              <td class="py-3.5 px-4 text-slate-500">Cloud shared drives</td>
+              <td class="py-3.5 px-4 text-slate-500">Vendor cloud database lock-in</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frequently Asked Questions (FAQ) -->
+  <section class="py-20 border-t border-slate-200 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="text-center">
+        <h2 class="font-editorial text-3xl font-semibold text-slate-900">Frequently Asked Questions</h2>
+        <p class="mt-2 text-slate-600 text-sm">Common questions from project managers, PMOs, and resource directors.</p>
+      </div>
+
+      <div class="space-y-6 text-sm">
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <h3 class="font-semibold text-slate-900 text-base">Is resourcedeck really 100% free forever?</h3>
+          <p class="text-slate-600 leading-relaxed">
+            Yes. resourcedeck is published under the open source MIT License. There are no user limits, no trial periods, no hidden features locked behind a credit card, and no subscription fees. You can use it freely across your entire organization.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <h3 class="font-semibold text-slate-900 text-base">What operating systems are supported?</h3>
+          <p class="text-slate-600 leading-relaxed">
+            resourcedeck is available as a standalone desktop application for macOS (both Apple Silicon and Intel) and Windows (64-bit). Simply download the installer, open it, and begin planning immediately—no complex installation or developer tools required.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <h3 class="font-semibold text-slate-900 text-base">How does resourcedeck calculate capacity and working days?</h3>
+          <p class="text-slate-600 leading-relaxed">
+            resourcedeck uses a pure deterministic calculation engine based on actual working weekdays (skipping weekends). It automatically deducts corporate holidays, shutdown windows, and individual PTO to calculate exact net working hours and cost distribution month-by-month.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <h3 class="font-semibold text-slate-900 text-base">Where is my data stored? Does anything get sent to the cloud?</h3>
+          <p class="text-slate-600 leading-relaxed">
+            resourcedeck is 100% local-first and offline. Your entire plan is stored in a single <code class="text-xs bg-slate-100 px-1 py-0.5 rounded font-mono">.rdeck</code> file (standard SQLite) on your local hard drive or shared company folder. There is zero telemetry, zero analytics tracking, and no cloud server.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
+          <h3 class="font-semibold text-slate-900 text-base">Can I share my .rdeck files with colleagues?</h3>
+          <p class="text-slate-600 leading-relaxed">
+            Yes. A <code class="text-xs bg-slate-100 px-1 py-0.5 rounded font-mono">.rdeck</code> file is a single self-contained file. You can email it, commit it to a repository, or put it in Google Drive, OneDrive, or Box for your PMO team to open.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Call to Action -->
+  <section class="py-20 bg-slate-900 text-white border-t border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+      <h2 class="font-editorial text-3xl sm:text-4xl font-semibold tracking-tight">
+        Ready to take control of your capacity and portfolio?
+      </h2>
+      <p class="text-slate-300 text-base max-w-2xl mx-auto leading-relaxed">
+        Download resourcedeck today. Zero onboarding, zero credit cards, zero telemetry. Start balancing your team and projects in minutes.
+      </p>
+      <div id="bottom-download-buttons" class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="https://github.com/georgeshaheen/resourcedeck/releases/latest/download/resourcedeck-mac.dmg" id="btn-mac-bottom" class="w-full sm:w-auto px-7 py-3.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors shadow-sm flex items-center justify-center gap-2.5">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.38c.62-.75 1.04-1.8 1.04-2.85 0-.15-.01-.29-.04-.43-.99.04-2.18.66-2.89 1.49-.55.63-.99 1.66-.99 2.7 0 .16.03.3.05.37.1.01.24.03.38.03.9 0 1.91-.56 2.45-1.31z"/></svg>
+          <span>Download for Mac (.dmg)</span>
+        </a>
+        <a href="https://github.com/georgeshaheen/resourcedeck/releases/latest/download/resourcedeck-win.exe" id="btn-win-bottom" class="w-full sm:w-auto px-7 py-3.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold transition-colors flex items-center justify-center gap-2.5">
+          <svg class="w-4 h-4 text-slate-300 fill-current" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.95-1.801"/></svg>
+          <span>Download for Windows (.exe)</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-slate-950 text-slate-500 text-xs border-t border-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="w-3 h-3 bg-white"></span>
+        <span class="font-editorial text-base text-slate-200 font-semibold lowercase">resourcedeck</span>
+        <span class="text-slate-700">|</span>
+        <span>Free & Open Source Resource Capacity & Portfolio Planning Workbench</span>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <a href="https://resourcedeck.app/" class="hover:text-slate-300 transition-colors">resourcedeck.app</a>
+        <a href="https://github.com/georgeshaheen/resourcedeck" class="hover:text-slate-300 transition-colors">GitHub Repository</a>
+        <a href="https://github.com/georgeshaheen/resourcedeck/releases" class="hover:text-slate-300 transition-colors">Releases</a>
+        <a href="https://github.com/georgeshaheen/resourcedeck/blob/main/LICENSE" class="hover:text-slate-300 transition-colors">MIT License</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vanilla Lightbox Modal for High-Resolution Screenshot Inspection -->
+  <div id="image-lightbox" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm hidden items-center justify-center p-4 sm:p-8 cursor-zoom-out" onclick="closeLightbox()">
+    <div class="relative max-w-7xl max-h-[92vh] flex flex-col items-center" onclick="event.stopPropagation()">
+      <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-white/80 hover:text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 py-1 px-2.5 rounded bg-slate-800/80 hover:bg-slate-700 transition-colors">
+        <span>Close [Esc]</span>
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl border border-slate-700/60 bg-white">
+      <p id="lightbox-caption" class="mt-3 text-xs sm:text-sm text-slate-300 text-center font-medium max-w-3xl px-2"></p>
+    </div>
+  </div>
+
+  <script>
+    // Lightbox Controls
+    function openLightbox(src, caption) {
+      const lb = document.getElementById('image-lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      if (!lb || !img || !cap) return;
+      img.src = src;
+      img.alt = caption || 'resourcedeck showcase screenshot';
+      cap.textContent = caption || '';
+      lb.classList.remove('hidden');
+      lb.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById('image-lightbox');
+      if (!lb) return;
+      lb.classList.add('hidden');
+      lb.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Mobile Hamburger Menu Controls
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const btn = document.getElementById('mobile-menu-toggle');
+      if (!drawer || !btn) return;
+      const isOpen = !drawer.classList.contains('hidden');
+      if (isOpen) {
+        drawer.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        drawer.classList.remove('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    // Operating System Autodetection for Smart Download CTAs
+    (function initOSDetection() {
+      const userAgent = navigator.userAgent || '';
+      const platform = navigator.platform || '';
+      const isMac = /Mac|iPhone|iPod|iPad/i.test(userAgent) || /Mac/i.test(platform);
+      const isWin = /Win/i.test(userAgent) || /Win/i.test(platform);
+
+      const heroContainer = document.getElementById('hero-download-buttons');
+      const heroSubtext = document.getElementById('hero-platform-subtext');
+      const bottomContainer = document.getElementById('bottom-download-buttons');
+
+      const macBtnHero = document.getElementById('btn-mac-hero');
+      const winBtnHero = document.getElementById('btn-win-hero');
+      const macBtnBottom = document.getElementById('btn-mac-bottom');
+      const winBtnBottom = document.getElementById('btn-win-bottom');
+
+      if (isWin) {
+        // Swap visual prominence so Windows button is primary on Windows devices
+        if (heroContainer && macBtnHero && winBtnHero) {
+          heroContainer.insertBefore(winBtnHero, macBtnHero);
+          winBtnHero.className = "w-full sm:w-auto px-6 py-3.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2.5";
+          const winSvg = winBtnHero.querySelector('svg');
+          if (winSvg) winSvg.className = "w-4 h-4 fill-current";
+          const winTag = winBtnHero.querySelector('span:last-child');
+          if (winTag) winTag.className = "text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-normal";
+
+          macBtnHero.className = "w-full sm:w-auto px-6 py-3.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-sm transition-colors shadow-2xs flex items-center justify-center gap-2.5";
+          const macTag = macBtnHero.querySelector('span:last-child');
+          if (macTag) macTag.className = "text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-normal";
+        }
+        if (bottomContainer && macBtnBottom && winBtnBottom) {
+          bottomContainer.insertBefore(winBtnBottom, macBtnBottom);
+          winBtnBottom.className = "w-full sm:w-auto px-7 py-3.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors shadow-sm flex items-center justify-center gap-2.5";
+          macBtnBottom.className = "w-full sm:w-auto px-7 py-3.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold transition-colors flex items-center justify-center gap-2.5";
+        }
+        if (heroSubtext) {
+          heroSubtext.textContent = "Detected Windows (64-bit) · Also available for macOS (Apple Silicon & Intel)";
+        }
+      } else if (isMac) {
+        if (heroSubtext) {
+          heroSubtext.textContent = "Detected macOS (Apple Silicon & Intel) · Also available for Windows";
+        }
+      }
+    })();
+  </script>
+
+</body>
+</html>
