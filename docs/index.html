@@ -802,14 +802,12 @@
 
         <div class="p-5 rounded-lg border border-slate-200 bg-[#fbfbfa] space-y-2">
           <h3 class="font-semibold text-slate-900 text-base">First-time launch on macOS or Windows: What should I know?</h3>
-          <p class="text-slate-600 leading-relaxed">
-            Because resourcedeck is a community-driven, 100% free open-source project without a paid corporate certificate, your operating system may ask for a quick one-time confirmation on first launch:
+          <p class="text-slate-600 leading-relaxed text-sm">
+            Here is what to expect when opening resourcedeck for the first time:
           </p>
           <ul class="text-slate-600 leading-relaxed text-sm list-disc pl-5 space-y-1.5">
-            <li><strong>macOS</strong>: When downloaded from a browser, macOS Gatekeeper may show a prompt saying <em>&ldquo;resourcedeck is damaged and can&rsquo;t be opened&rdquo;</em>. Move <code class="text-xs bg-slate-100 px-1 py-0.5 rounded font-mono">resourcedeck.app</code> into <code class="text-xs bg-slate-100 px-1 py-0.5 rounded font-mono">/Applications</code> and run this one-line command in Terminal to clear the download quarantine:
-              <div class="mt-1.5 font-mono text-xs bg-slate-900 text-slate-200 p-2 rounded select-all">xattr -cr /Applications/resourcedeck.app</div>
-            </li>
-            <li><strong>Windows</strong>: If Windows SmartScreen displays a blue prompt, simply click <strong>&ldquo;More info&rdquo;</strong> followed by <strong>&ldquo;Run anyway&rdquo;</strong>.</li>
+            <li><strong>macOS</strong>: resourcedeck is cryptographically signed and notarized with an official Apple Developer ID. When opened for the first time, macOS will display a standard confirmation prompt: <em>&ldquo;resourcedeck is an app downloaded from the Internet. Are you sure you want to open it?&rdquo;</em> Simply click <strong>Open</strong> to launch.</li>
+            <li><strong>Windows</strong>: Because Windows code-signing certificates are expensive and resourcedeck is a free open-source project, Windows SmartScreen may show a prompt saying <em>&ldquo;Windows protected your PC&rdquo;</em>. Simply click <strong>&ldquo;More info&rdquo;</strong> followed by <strong>&ldquo;Run anyway&rdquo;</strong>.</li>
           </ul>
         </div>
 

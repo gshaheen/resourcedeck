@@ -9,3 +9,7 @@ dist/
 .env
 .env.*
 scripts/*.cjs
+*.p12
+*.cer
+*.key
+*.certSigningRequest

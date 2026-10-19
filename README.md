@@ -145,11 +145,8 @@ Download the latest standalone desktop application for your operating system:
 
 No servers to configure, no cloud accounts, and no complex setup. Download the installer, double-click to install, and start planning immediately.
 
-> **Note on First-Time Launch (Open Source App)**: Because resourcedeck is an independent, 100% free open-source project without a paid Apple Developer certificate:
-> - **macOS**: When downloaded from a browser, macOS Gatekeeper may display a prompt saying *"resourcedeck is damaged and can’t be opened"*. To clear the quarantine flag, move `resourcedeck.app` into `/Applications` and run this one-line command in Terminal:
->   ```bash
->   xattr -cr /Applications/resourcedeck.app
->   ```
+> **First-Time Opening**:
+> - **macOS**: Signed and notarized with an official Apple Developer ID (`GEORGE MIKHAEL SHAHEEN`). When opening for the first time, macOS will ask *"resourcedeck is an app downloaded from the Internet. Are you sure you want to open it?"*—simply click **Open**.
 > - **Windows**: If Windows SmartScreen displays a *"Windows protected your PC"* prompt, simply click **More info** followed by **Run anyway**.
 
 Every plan is a single portable `.rdeck` file—easy to back up, share over corporate drives, or store in Git. Open the included `demo-portfolio.rdeck` sample directly from the app to explore a pre-populated, realistic portfolio.

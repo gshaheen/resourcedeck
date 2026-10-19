@@ -19,6 +19,11 @@ mac:
   icon: build/icon.icns
   category: public.app-category.business
   artifactName: ${productName}-mac.${ext}
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.inherit.plist
+  notarize: true
   target:
     - dmg
     - zip
