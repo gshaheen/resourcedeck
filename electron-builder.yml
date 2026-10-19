@@ -16,11 +16,13 @@ fileAssociations:
     description: resourcedeck Portfolio & Capacity Plan
     role: Editor
 mac:
+  icon: build/icon.icns
   category: public.app-category.business
   target:
     - dmg
     - zip
 win:
+  icon: build/icon.ico
   target:
     - nsis
     - zip

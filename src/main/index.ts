@@ -1,5 +1,6 @@
-import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, shell, nativeImage } from 'electron'
 import { join } from 'path'
+import { existsSync } from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { autoUpdater } from 'electron-updater'
 import { dbInstance, registerIpcHandlers } from './ipc'
@@ -7,6 +8,23 @@ import { dbInstance, registerIpcHandlers } from './ipc'
 // Ensure application name is always 'resourcedeck' in macOS menu bar & About panel
 app.name = 'resourcedeck'
 app.setName('resourcedeck')
+
+function getAppIcon(): Electron.NativeImage {
+  const iconPaths = [
+    join(process.resourcesPath, 'icon.png'),
+    join(process.resourcesPath, 'resources/icon.png'),
+    join(process.resourcesPath, 'build/icon.png'),
+    join(__dirname, '../../resources/icon.png'),
+    join(__dirname, '../../build/icon.png')
+  ]
+  for (const p of iconPaths) {
+    if (existsSync(p)) {
+      const img = nativeImage.createFromPath(p)
+      if (!img.isEmpty()) return img
+    }
+  }
+  return nativeImage.createEmpty()
+}
 
 let mainWindow: BrowserWindow | null = null
 let pendingFileToOpen: string | null = null
@@ -42,6 +60,8 @@ function setupApplicationMenu(): void {
 }
 
 function createWindow(): void {
+  const appIcon = getAppIcon()
+
   mainWindow = new BrowserWindow({
     width: 1480,
     height: 940,
@@ -49,6 +69,7 @@ function createWindow(): void {
     minHeight: 720,
     show: false,
     title: 'resourcedeck',
+    icon: appIcon.isEmpty() ? undefined : appIcon,
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
     trafficLightPosition: { x: 16, y: 16 },
     webPreferences: {
@@ -129,6 +150,14 @@ app.on('open-file', (event, filePath) => {
 app.whenReady().then(() => {
   app.setName('resourcedeck')
   electronApp.setAppUserModelId('com.resourcedeck.app')
+
+  if (process.platform === 'darwin') {
+    const appIcon = getAppIcon()
+    if (!appIcon.isEmpty()) {
+      app.dock.setIcon(appIcon)
+    }
+  }
+
   setupApplicationMenu()
 
   app.on('browser-window-created', (_, window) => {
