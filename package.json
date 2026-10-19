@@ -19,7 +19,9 @@
     "package:mac": "electron-vite build && electron-builder --mac",
     "package:win": "electron-vite build && electron-builder --win",
     "release": "electron-vite build && electron-builder --publish always",
-    "downloads": "node scripts/checkDownloads.mjs"
+    "downloads": "node scripts/checkDownloads.mjs",
+    "site:dev": "wrangler dev",
+    "site:deploy": "wrangler deploy"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
