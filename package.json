@@ -18,7 +18,8 @@
     "postinstall": "electron-builder install-app-deps",
     "package:mac": "electron-vite build && electron-builder --mac",
     "package:win": "electron-vite build && electron-builder --win",
-    "release": "electron-vite build && electron-builder --publish always"
+    "release": "electron-vite build && electron-builder --publish always",
+    "downloads": "node scripts/checkDownloads.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
